@@ -1,6 +1,6 @@
 {
   "name": "anhmv-webgl-utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "WebGL toolbox for learning from scratch",
   "main": "./dist/bundle.js",
   "author": "Anh Mac <anhmv91@gmail.com>",
