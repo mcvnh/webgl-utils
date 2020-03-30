@@ -6,6 +6,8 @@
   "author": "Anh Mac <anhmv91@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-anhmv": "^1.0.0",
     "rollup-plugin-terser": "^5.3.0"
   }
 }

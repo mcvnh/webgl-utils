@@ -1,7 +1,8 @@
-(function (factory) {
+(function(factory) {
   typeof define === 'function' && define.amd ? define(factory) :
-  factory();
-}((function () { 'use strict';
+    factory();
+}((function() {
+  'use strict';
 
   /*
    * Copyright 2010, Google Inc.
@@ -87,7 +88,7 @@
      * @type {string}
      */
     var OTHER_PROBLEM = '' +
-      "It doesn't appear your computer can support WebGL.<br/>" +
+      'It doesn\'t appear your computer can support WebGL.<br/>' +
       '<a href="http://get.webgl.org">Click here for more information.</a>';
 
     /**
@@ -103,15 +104,15 @@
      * @return {WebGLRenderingContext} The created context.
      */
     var setupWebGL = function(canvas, opt_attribs, opt_onError) {
-      function handleCreationError(msg) {
-        var container = document.getElementsByTagName("body")[0];
+      function handleCreationError (msg) {
+        var container = document.getElementsByTagName('body')[0];
         //var container = canvas.parentNode;
         if (container) {
           var str = window.WebGLRenderingContext ?
             OTHER_PROBLEM :
             GET_A_WEBGL_BROWSER;
           if (msg) {
-            str += "<br/><br/>Status: " + msg;
+            str += '<br/><br/>Status: ' + msg;
           }
           container.innerHTML = makeFailHTML(str);
         }
@@ -119,16 +120,16 @@
       opt_onError = opt_onError || handleCreationError;
 
       if (canvas.addEventListener) {
-        canvas.addEventListener("webglcontextcreationerror", function(event) {
+        canvas.addEventListener('webglcontextcreationerror', function(event) {
           opt_onError(event.statusMessage);
         }, false);
       }
       var context = create3DContext(canvas, opt_attribs);
       if (!context) {
         if (!window.WebGLRenderingContext) {
-          opt_onError("");
+          opt_onError('');
         } else {
-          opt_onError("");
+          opt_onError('');
         }
       }
 
@@ -142,7 +143,7 @@
      * @return {!WebGLContext} The created context.
      */
     var create3DContext = function(canvas, opt_attribs) {
-      var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
+      var names = ['webgl', 'experimental-webgl', 'webkit-3d', 'moz-webgl'];
       var context = null;
       for (var ii = 0; ii < names.length; ++ii) {
         try {
@@ -430,7 +431,7 @@
      *    you have more than one context it doesn't matter which one
      *    you pass in, it is only used to pull out constants.
      */
-    function init(ctx) {
+    function init (ctx) {
       if (glEnums == null) {
         glEnums = {};
         for (var propertyName in ctx) {
@@ -444,7 +445,7 @@
     /**
      * Checks the utils have been initialized.
      */
-    function checkInit() {
+    function checkInit () {
       if (glEnums == null) {
         throw 'WebGLDebugUtils.init(ctx) not called';
       }
@@ -455,7 +456,7 @@
      * @param {*} value Value to check if it might be an enum.
      * @return {boolean} True if value matches one of the WebGL defined enums
      */
-    function mightBeEnum(value) {
+    function mightBeEnum (value) {
       checkInit();
       return (glEnums[value] !== undefined);
     }
@@ -469,11 +470,11 @@
      * @param {number} value Value to return an enum for
      * @return {string} The string version of the enum.
      */
-    function glEnumToString(value) {
+    function glEnumToString (value) {
       checkInit();
       var name = glEnums[value];
       return (name !== undefined) ? name :
-        ("*UNKNOWN WebGL ENUM (0x" + value.toString(16) + ")");
+        ('*UNKNOWN WebGL ENUM (0x' + value.toString(16) + ')');
     }
 
     /**
@@ -484,7 +485,7 @@
      * @param {*} value The value of the argument.
      * @return {string} The value as a string.
      */
-    function glFunctionArgToString(functionName, argumentIndex, value) {
+    function glFunctionArgToString (functionName, argumentIndex, value) {
       var funcInfo = glValidEnumContexts[functionName];
       if (funcInfo !== undefined) {
         if (funcInfo[argumentIndex]) {
@@ -506,17 +507,17 @@
      *        error. If not specified the default function calls
      *        console.log with a message.
      */
-    function makeDebugContext(ctx, opt_onErrorFunc) {
+    function makeDebugContext (ctx, opt_onErrorFunc) {
       init(ctx);
       opt_onErrorFunc = opt_onErrorFunc || function(err, functionName, args) {
         // apparently we can't do args.join(",");
-        var argStr = "";
+        var argStr = '';
         for (var ii = 0; ii < args.length; ++ii) {
           argStr += ((ii == 0) ? '' : ', ') +
             glFunctionArgToString(functionName, ii, args[ii]);
         }
-        log("WebGL error " + glEnumToString(err) + " in " + functionName +
-          "(" + argStr + ")");
+        log('WebGL error ' + glEnumToString(err) + ' in ' + functionName +
+          '(' + argStr + ')');
       };
 
       // Holds booleans for each GL error so after we get the error ourselves
@@ -524,7 +525,7 @@
       var glErrorShadow = {};
 
       // Makes a function that calls a WebGL function and then calls getError.
-      function makeErrorWrapper(ctx, functionName) {
+      function makeErrorWrapper (ctx, functionName) {
         return function() {
           var result = ctx[functionName].apply(ctx, arguments);
           var err = ctx.getError();
@@ -561,7 +562,7 @@
       return wrapper;
     }
 
-    function resetToInitialState(ctx) {
+    function resetToInitialState (ctx) {
       var numAttribs = ctx.getParameter(ctx.MAX_VERTEX_ATTRIBS);
       var tmp = ctx.createBuffer();
       ctx.bindBuffer(ctx.ARRAY_BUFFER, tmp);
@@ -622,10 +623,12 @@
       ctx.clear(ctx.COLOR_BUFFER_BIT | ctx.DEPTH_BUFFER_BIT | ctx.STENCIL_BUFFER_BIT);
 
       // TODO: This should NOT be needed but Firefox fails with 'hint'
-      while (ctx.getError());
+      while (ctx.getError()) {
+
+      }
     }
 
-    function makeLostContextSimulatingContext(ctx) {
+    function makeLostContextSimulatingContext (ctx) {
       var wrapper_ = {};
       var contextId_ = 1;
       var contextLost_ = false;
@@ -637,7 +640,7 @@
       // Holds booleans for each GL error so can simulate errors.
       var glErrorShadow_ = {};
 
-      function isWebGLObject(obj) {
+      function isWebGLObject (obj) {
         //return false;
         return (obj instanceof WebGLBuffer ||
           obj instanceof WebGLFramebuffer ||
@@ -647,7 +650,7 @@
           obj instanceof WebGLTexture);
       }
 
-      function checkResources(args) {
+      function checkResources (args) {
         for (var ii = 0; ii < args.length; ++ii) {
           var arg = args[ii];
           if (isWebGLObject(arg)) {
@@ -657,7 +660,7 @@
         return true;
       }
 
-      function clearErrors() {
+      function clearErrors () {
         var k = Object.keys(glErrorShadow_);
         for (var ii = 0; ii < k.length; ++ii) {
           delete glErrorShdow_[k];
@@ -665,7 +668,7 @@
       }
 
       // Makes a function that simulates WebGL when out of context.
-      function makeLostContextWrapper(ctx, functionName) {
+      function makeLostContextWrapper (ctx, functionName) {
         var f = ctx[functionName];
         return function() {
           // Only call the functions if the context is not lost.
@@ -688,13 +691,13 @@
         }
       }
 
-      function makeWebGLContextEvent(statusMessage) {
+      function makeWebGLContextEvent (statusMessage) {
         return {
           statusMessage: statusMessage
         };
       }
 
-      function freeResources() {
+      function freeResources () {
         for (var ii = 0; ii < resourceDb_.length; ++ii) {
           var resource = resourceDb_[ii];
           if (resource instanceof WebGLBuffer) {
@@ -717,12 +720,14 @@
         if (!contextLost_) {
           contextLost_ = true;
           ++contextId_;
-          while (ctx.getError());
+          while (ctx.getError()) {
+
+          }
           clearErrors();
           glErrorShadow_[ctx.CONTEXT_LOST_WEBGL] = true;
           setTimeout(function() {
             if (onLost_) {
-              onLost_(makeWebGLContextEvent("context lost"));
+              onLost_(makeWebGLContextEvent('context lost'));
             }
           }, 0);
         }
@@ -739,11 +744,11 @@
                 var callback = onRestored_;
                 onRestored_ = nextOnRestored_;
                 nextOnRestored_ = undefined;
-                callback(makeWebGLContextEvent("context restored"));
+                callback(makeWebGLContextEvent('context restored'));
               }
             }, 0);
           } else {
-            throw "You can not restore the context without a listener"
+            throw 'You can not restore the context without a listener';
           }
         }
       };
@@ -766,12 +771,12 @@
       };
 
       var creationFunctions = [
-        "createBuffer",
-        "createFramebuffer",
-        "createProgram",
-        "createRenderbuffer",
-        "createShader",
-        "createTexture"
+        'createBuffer',
+        'createFramebuffer',
+        'createProgram',
+        'createRenderbuffer',
+        'createShader',
+        'createTexture'
       ];
       for (var ii = 0; ii < creationFunctions.length; ++ii) {
         var functionName = creationFunctions[ii];
@@ -789,23 +794,23 @@
       }
 
       var functionsThatShouldReturnNull = [
-        "getActiveAttrib",
-        "getActiveUniform",
-        "getBufferParameter",
-        "getContextAttributes",
-        "getAttachedShaders",
-        "getFramebufferAttachmentParameter",
-        "getParameter",
-        "getProgramParameter",
-        "getProgramInfoLog",
-        "getRenderbufferParameter",
-        "getShaderParameter",
-        "getShaderInfoLog",
-        "getShaderSource",
-        "getTexParameter",
-        "getUniform",
-        "getUniformLocation",
-        "getVertexAttrib"
+        'getActiveAttrib',
+        'getActiveUniform',
+        'getBufferParameter',
+        'getContextAttributes',
+        'getAttachedShaders',
+        'getFramebufferAttachmentParameter',
+        'getParameter',
+        'getProgramParameter',
+        'getProgramInfoLog',
+        'getRenderbufferParameter',
+        'getShaderParameter',
+        'getShaderInfoLog',
+        'getShaderSource',
+        'getTexParameter',
+        'getUniform',
+        'getUniformLocation',
+        'getVertexAttrib'
       ];
       for (var ii = 0; ii < functionsThatShouldReturnNull.length; ++ii) {
         var functionName = functionsThatShouldReturnNull[ii];
@@ -815,18 +820,18 @@
               return null;
             }
             return f.apply(ctx, arguments);
-          }
+          };
         }(wrapper_[functionName]);
       }
 
       var isFunctions = [
-        "isBuffer",
-        "isEnabled",
-        "isFramebuffer",
-        "isProgram",
-        "isRenderbuffer",
-        "isShader",
-        "isTexture"
+        'isBuffer',
+        'isEnabled',
+        'isFramebuffer',
+        'isProgram',
+        'isRenderbuffer',
+        'isShader',
+        'isTexture'
       ];
       for (var ii = 0; ii < isFunctions.length; ++ii) {
         var functionName = isFunctions[ii];
@@ -836,7 +841,7 @@
               return false;
             }
             return f.apply(ctx, arguments);
-          }
+          };
         }(wrapper_[functionName]);
       }
 
@@ -871,13 +876,13 @@
         return contextLost_;
       };
 
-      function wrapEvent(listener) {
-        if (typeof(listener) == "function") {
+      function wrapEvent (listener) {
+        if (typeof (listener) == 'function') {
           return listener;
         } else {
           return function(info) {
             listener.handleEvent(info);
-          }
+          };
         }
       }
 
